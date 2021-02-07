@@ -23,9 +23,9 @@ namespace Padarogga.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Padarogga.ServerAPI"));
-
             builder.Services.AddApiAuthorization();
 
+            builder.Services.AddDevExpressBlazor();
             await builder.Build().RunAsync();
         }
     }

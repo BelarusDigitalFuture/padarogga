@@ -8,5 +8,6 @@ namespace Padarogga.Server.Models
 {
     public class ApplicationUser : IdentityUser
     {
+
     }
 }
