@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Padarogga.Server", "Padarogga\Server\Padarogga.Server.csproj", "{E4C8DFF9-D7BE-4C2B-8A1E-2E4DC875B97E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Padarogga.Server", "Padarogga\Server\Padarogga.Server.csproj", "{E4C8DFF9-D7BE-4C2B-8A1E-2E4DC875B97E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Padarogga.Client", "Padarogga\Client\Padarogga.Client.csproj", "{98895BA9-8117-400C-B6B7-C9706598D79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Padarogga.Client", "Padarogga\Client\Padarogga.Client.csproj", "{98895BA9-8117-400C-B6B7-C9706598D79C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Padarogga.Shared", "Padarogga\Shared\Padarogga.Shared.csproj", "{EFF5ADF9-5CFC-467A-8936-6F22F4B66D16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Padarogga.Shared", "Padarogga\Shared\Padarogga.Shared.csproj", "{EFF5ADF9-5CFC-467A-8936-6F22F4B66D16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

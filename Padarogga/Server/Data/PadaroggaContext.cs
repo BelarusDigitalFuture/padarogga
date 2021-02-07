@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class PadaroggaContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
+        public PadaroggaContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
@@ -76,7 +76,11 @@ namespace Padarogga.Server.Data
                   .HasOne(c => c.Route)
                   .WithMany(s => s.Favorites)
                   .HasForeignKey(r => r.RouteId);
+
+            modelBuilder.HasPostgresExtension("postgis");
         }
+
+
 
 
     }

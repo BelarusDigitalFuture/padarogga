@@ -4,19 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Padarogga.Server.Data;
 
 namespace Padarogga.Server.Migrations
 {
     [DbContext(typeof(PadaroggaContext))]
-    [Migration("20210207121044_Init")]
-    partial class Init
+    [Migration("20210207221908_AddRouteDuration")]
+    partial class AddRouteDuration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:PostgresExtension:postgis", ",,")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
@@ -347,6 +349,103 @@ namespace Padarogga.Server.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Padarogga.Server.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.CustomerRating", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CustomerId", "RouteId");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.Favorites", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("CustomerId", "RouteId");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("Padarogga.Server.Models.Route", b =>
                 {
                     b.Property<Guid>("Id")
@@ -366,6 +465,9 @@ namespace Padarogga.Server.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("Difficulty")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Duration")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -393,6 +495,15 @@ namespace Padarogga.Server.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<Point>("Location")
+                        .HasColumnType("geometry (point)");
+
+                    b.Property<string>("MediaUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -467,6 +578,58 @@ namespace Padarogga.Server.Migrations
                     b.HasOne("Padarogga.Server.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.Comment", b =>
+                {
+                    b.HasOne("Padarogga.Server.Models.Customer", "Customer")
+                        .WithMany("Comments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Padarogga.Server.Models.Route", "Route")
+                        .WithMany("Comments")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.Customer", b =>
+                {
+                    b.HasOne("Padarogga.Server.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.CustomerRating", b =>
+                {
+                    b.HasOne("Padarogga.Server.Models.Customer", "Customer")
+                        .WithMany("Ratings")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Padarogga.Server.Models.Route", "Route")
+                        .WithMany("Ratings")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.Favorites", b =>
+                {
+                    b.HasOne("Padarogga.Server.Models.Customer", "Customer")
+                        .WithMany("Favorites")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Padarogga.Server.Models.Route", "Route")
+                        .WithMany("Favorites")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Padarogga.Server.Models.Route", b =>

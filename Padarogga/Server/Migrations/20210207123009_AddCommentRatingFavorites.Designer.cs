@@ -9,7 +9,7 @@ using Padarogga.Server.Data;
 
 namespace Padarogga.Server.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(PadaroggaContext))]
     [Migration("20210207123009_AddCommentRatingFavorites")]
     partial class AddCommentRatingFavorites
     {

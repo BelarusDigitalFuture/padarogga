@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace Padarogga.Client
 {
@@ -24,6 +25,11 @@ namespace Padarogga.Client
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Padarogga.ServerAPI"));
             builder.Services.AddApiAuthorization();
+
+
+            CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("ru-RU");
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
             builder.Services.AddDevExpressBlazor();
             await builder.Build().RunAsync();

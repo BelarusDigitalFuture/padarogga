@@ -1,0 +1,253 @@
+@page "/addroute"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Padarogga.Shared
+@using Padarogga.Client.Extensions
+@using System
+@using System.ComponentModel.DataAnnotations
+@using GoogleMapsComponents
+@using GoogleMapsComponents.Maps
+@inject HttpClient Http
+<h1>Create new route</h1>
+
+
+
+
+<DxFormLayout CaptionPosition="CaptionPosition.Vertical">
+    <DxFormLayoutGroup Caption="Информация о маршруте" ColSpanMd="12">
+        <DxFormLayoutItem Caption="Название:" ColSpanMd="12">
+            <Template>
+                <DxTextBox @bind-Text="@Model.Name"
+                           BindValueMode="BindValueMode.OnInput"
+                           NullText="Type name...">
+                </DxTextBox>
+            </Template>
+        </DxFormLayoutItem>
+
+        <DxFormLayoutItem Caption="Категория:" ColSpanMd="6" BeginRow="true">
+            <Template>
+                <DxComboBox Data="@categories"
+                            AllowUserInput="true"
+                            NullText="Select category ..."
+                            TextFieldName="@nameof(CategoryDto.Name)"
+                            ValueFieldName="@nameof(CategoryDto.Id)"
+                            @bind-Value="@Model.CategoryId">
+                </DxComboBox>
+            </Template>
+        </DxFormLayoutItem>
+
+        <DxFormLayoutItem Caption="Сложность:" ColSpanMd="6">
+            <Template>
+                <DxComboBox Data="@difficulties"
+                            AllowUserInput="false"
+                            NullText="Select difficulty ..."
+                            TextFieldName="@nameof(EnumWrapper<Difficulty>.Text)"
+                            ValueFieldName="@nameof(EnumWrapper<Difficulty>.Value)"
+                            @bind-Value="@Model.Difficulty">
+                </DxComboBox>
+            </Template>
+        </DxFormLayoutItem>
+
+        <DxFormLayoutItem Caption="Продолжительность:" ColSpanMd="6">
+            <Template>
+                <DxSpinEdit @bind-Value="@Model.Duration" MinValue="1" MaxValue="24">
+                </DxSpinEdit>
+                <DxComboBox Data="@periods"
+                            AllowUserInput="false"
+                            NullText="Select period ..."
+                            TextFieldName="@nameof(EnumWrapper<DurationPeriod>.Text)"
+                            ValueFieldName="@nameof(EnumWrapper<DurationPeriod>.Value)"
+                            @bind-Value="@Model.DurationPeriod">
+                </DxComboBox>
+            </Template>
+        </DxFormLayoutItem>
+
+        <DxFormLayoutItem Caption="Описание:" BeginRow="true">
+            <Template>
+                <DxMemo @bind-Text="@Model.Description">
+                </DxMemo>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutItem BeginRow="true" ColSpanMd="12">
+        <Template>
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Text="Add waypoint" Title="Add waypoint" Click="@AddWaypoint" IconCssClass="add" style="margin-right: 0.5em;" />
+            <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
+        </Template>
+    </DxFormLayoutItem>
+
+
+    @foreach (var waypoint in Model.Waypoints)
+    {
+        <DxFormLayoutGroup Caption="@waypoint.Name" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Название:" ColSpanMd="4" BeginRow="false">
+                <Template>
+                    <DxTextBox @bind-Text="@waypoint.Name"
+                               BindValueMode="BindValueMode.OnInput"
+                               NullText="Type name...">
+                    </DxTextBox>
+                </Template>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Фото:" ColSpanMd="4" BeginRow="false">
+                <Template>
+                    <DxTextBox @bind-Text="@waypoint.ImageUrl"
+                               BindValueMode="BindValueMode.OnInput"
+                               NullText="Image URL">
+                    </DxTextBox>
+                </Template>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Media:" ColSpanMd="4" BeginRow="false">
+                <Template>
+                    <DxTextBox @bind-Text="@waypoint.MediaUrl"
+                               BindValueMode="BindValueMode.OnInput"
+                               NullText="Media URL">
+                    </DxTextBox>
+                </Template>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Описание:" ColSpanMd="4" BeginRow="true">
+                <Template>
+                    <DxMemo @bind-Text="@waypoint.Description">
+                    </DxMemo>
+                </Template>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    }
+
+    <DxFormLayoutItem BeginRow="true" ColSpanMd="12">
+        <Template>
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Text="Create" Title="Save route" Click="@CreateRoute" style="margin-right: 0.5em;" />
+
+        </Template>
+    </DxFormLayoutItem>
+
+</DxFormLayout>
+
+
+
+@code {
+    private GoogleMap map1;
+
+    private MapOptions mapOptions;
+
+    private List<Marker> markers = new List<Marker>();
+
+    private List<LatLngLiteral> path = new List<LatLngLiteral>();
+
+    private Polyline polyline;
+
+    private CategoryDto[] categories;
+
+    private List<EnumWrapper<Difficulty>> difficulties;
+
+    private List<EnumWrapper<DurationPeriod>> periods;
+
+    public AddRouteModel Model { get; set; } = new AddRouteModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        mapOptions = new MapOptions()
+        {
+            Zoom = 13,
+            Center = new LatLngLiteral()
+            {
+                Lat = 13.505892,
+                Lng = 100.8162
+            },
+            MapTypeId = MapTypeId.Hybrid
+        };
+
+        try
+        {
+            categories = await Http.GetFromJsonAsync<CategoryDto[]>("Categories");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        difficulties = Enum.GetValues(typeof(Difficulty))
+    .OfType<Difficulty>()
+        .Select(t => new EnumWrapper<Difficulty>()
+        {
+            Value = t,
+            Text = t.GetAttribute<DisplayAttribute>().Name
+        }).ToList();
+
+        periods = Enum.GetValues(typeof(DurationPeriod))
+      .OfType<DurationPeriod>()
+          .Select(t => new EnumWrapper<DurationPeriod>()
+          {
+              Value = t,
+              Text = t.GetAttribute<DisplayAttribute>().Name
+          }).ToList();
+    }
+
+    public async Task CreateRoute()
+    {
+        try
+        {
+            var route = await Http.PostAsJsonAsync<AddRouteModel>("Routes", Model);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public async Task AddWaypoint()
+    {
+        if (polyline == null)
+        {
+            polyline = await Polyline.CreateAsync(map1.JsRuntime, new PolylineOptions()
+            {
+                Draggable = false,
+                Editable = true,
+                Map = map1.InteropObject
+            });
+        }
+
+        var waypoint = new AddWaypointModel();
+        Model.Waypoints.Add(waypoint);
+
+        var position = await map1.InteropObject.GetCenter();
+        var marker = await Marker.CreateAsync(map1.JsRuntime, new MarkerOptions()
+        {
+            Draggable = true,
+            Position = position,
+            Map = map1.InteropObject
+        });
+
+        markers.Add(marker);
+        path.Add(position);
+        await polyline.SetPath(path);
+
+        var infoWindow = await InfoWindow.CreateAsync(map1.JsRuntime, new InfoWindowOptions()
+        {
+            Position = position
+        });
+
+
+        await marker.AddListener<MouseEvent>("dragend", async (e) =>
+        {
+            waypoint.Latitude = e.LatLng.Lat;
+            waypoint.Longitude = e.LatLng.Lng;
+            position.Lat = e.LatLng.Lat;
+            position.Lng = e.LatLng.Lng;
+            await polyline.SetPath(path);
+            StateHasChanged();
+        });
+
+        await marker.AddListener<MouseEvent>("click", async (e) =>
+        {
+
+            await infoWindow.SetContent($"<b>{waypoint.Name}</b><br/><img src='{waypoint.ImageUrl}' width='300px'>");
+            await infoWindow.SetPosition(e.LatLng);
+            await infoWindow.Open(map1.InteropObject);
+        });
+    }
+}

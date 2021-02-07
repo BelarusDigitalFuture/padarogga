@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Padarogga.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace Padarogga.Server.Models
         public Author Author { get; set; }
 
         public Guid AuthorId { get; set; }
+
+        public int Duration { get; set; }
 
         public Difficulty Difficulty { get; set; }
 
