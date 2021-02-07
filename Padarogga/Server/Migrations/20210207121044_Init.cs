@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Padarogga.Server.Data.Migrations
+namespace Padarogga.Server.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +48,19 @@ namespace Padarogga.Server.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -85,7 +99,7 @@ namespace Padarogga.Server.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -106,7 +120,7 @@ namespace Padarogga.Server.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -186,6 +200,81 @@ namespace Padarogga.Server.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Authors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Authors_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Routes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<Guid>(nullable: false),
+                    Difficulty = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Routes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Routes_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Routes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Waypoints",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    RouteId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Waypoints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Waypoints_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -195,8 +284,7 @@ namespace Padarogga.Server.Data.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -222,8 +310,12 @@ namespace Padarogga.Server.Data.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_UserId",
+                table: "Authors",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -245,6 +337,21 @@ namespace Padarogga.Server.Data.Migrations
                 name: "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Routes_AuthorId",
+                table: "Routes",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Routes_CategoryId",
+                table: "Routes",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Waypoints_RouteId",
+                table: "Waypoints",
+                column: "RouteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -271,7 +378,19 @@ namespace Padarogga.Server.Data.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
+                name: "Waypoints");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Routes");
+
+            migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
