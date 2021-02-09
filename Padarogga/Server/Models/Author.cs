@@ -20,5 +20,7 @@ namespace Padarogga.Server.Models
         public DateTime DateOfBirth { get; set; }
 
         public ICollection<Route> Routes { get; set; }
+
+        public decimal Balance { get; set; }
     }
 }

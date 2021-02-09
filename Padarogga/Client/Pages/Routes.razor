@@ -1,0 +1,63 @@
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Padarogga.Shared
+@inject HttpClient Http
+
+<h3>Routes</h3>
+
+
+@if (routes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<DxDataGrid Data="routes">
+    <DxDataGridColumn Field="@nameof(AuthorRoute.Name)"
+                      Caption="Name" />
+    <DxDataGridColumn Field="@nameof(AuthorRoute.CategoryName)"
+                      Caption="Category"
+                      TextAlignment="DataGridTextAlign.Left"
+                      Width="100px" />
+    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Waypoints)"
+                              Caption="Waypoints"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridColumn Field="@nameof(AuthorRoute.Difficulty)"
+                              Caption="Difficulty"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Duration)"
+                              Caption="Duration"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Rating)"
+                              Caption="Rating"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Favorites)"
+                              Caption="Favorites"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Comments)"
+                              Caption="Comments" />
+</DxDataGrid>
+}
+
+
+@code {
+
+    private List<AuthorRoute> routes;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            routes = await Http.GetFromJsonAsync<List<AuthorRoute>>("Routes");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

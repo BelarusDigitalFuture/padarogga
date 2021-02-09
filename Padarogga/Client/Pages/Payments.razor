@@ -1,0 +1,53 @@
+﻿@page "/payments"
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Padarogga.Shared
+@inject HttpClient Http
+
+<h3>Payments</h3>
+
+
+@if (payments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<DxDataGrid Data="payments">
+    <DxDataGridDateEditColumn Field="@nameof(RoutePaymentDto.CreatedAt)"
+                              Caption="Date" />
+    <DxDataGridSpinEditColumn Field="@nameof(RoutePaymentDto.Amount)"
+                              Caption="Amount"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px" />
+    <DxDataGridColumn Field="@nameof(RoutePaymentDto.RouteName)"
+                      Caption="Route"
+                      TextAlignment="DataGridTextAlign.Left"
+                      Width="100px" />
+    <DxDataGridColumn Field="@nameof(RoutePaymentDto.CustomerName)"
+                      Caption="Customer"
+                      TextAlignment="DataGridTextAlign.Left"
+                      Width="100px"/>
+    <DxDataGridColumn Field="@nameof(RoutePaymentDto.Description)"
+                      Caption="Description"
+                      TextAlignment="DataGridTextAlign.Left"
+                      Width="100px" />   
+</DxDataGrid>
+}
+
+
+@code {
+
+    private List<RoutePaymentDto> payments;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            payments = await Http.GetFromJsonAsync<List<RoutePaymentDto>>("payments");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

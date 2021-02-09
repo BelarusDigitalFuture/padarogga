@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Padarogga.Server.Data;
 using Padarogga.Server.Models;
 using Padarogga.Shared;
@@ -58,5 +59,16 @@ namespace Padarogga.Server.Services
             await context.SaveChangesAsync();
             return route;
         }
+
+        public async Task<List<AuthorRoute>> GetByAuthorAsync(Guid authorId)
+        {
+            return await context.Routes
+                .Where(x => x.AuthorId == authorId)
+                .OrderByDescending(x => x.CreatedAt)
+                .ProjectToType<AuthorRoute>()
+                .ToListAsync();
+        }
+
+
     }
 }

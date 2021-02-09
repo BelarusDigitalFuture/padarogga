@@ -14,6 +14,8 @@ using System.Linq;
 using Padarogga.Server.Data;
 using Padarogga.Server.Models;
 using Padarogga.Server.Services;
+using Mapster;
+using Padarogga.Shared;
 
 namespace Padarogga.Server
 {
@@ -32,7 +34,7 @@ namespace Padarogga.Server
         {
             services.AddDbContext<PadaroggaContext>(options =>
                 options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection"), 
+                    Configuration.GetConnectionString("DefaultConnection"),
                     o => o.UseNetTopologySuite()));
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -46,6 +48,20 @@ namespace Padarogga.Server
             services.AddScoped<IRouteService, RouteService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
+            TypeAdapterConfig<Route, AuthorRoute>.NewConfig()
+                           .Map(dest => dest.CategoryName, src => src.Category.Name)
+                           .Map(dest => dest.Rating, src => src.Ratings.Average(x => x.Rating))
+                           .Map(dest => dest.Waypoints, src => src.Waypoints.Count())
+                           .Map(dest => dest.Comments, src => src.Comments.Count())
+                           .Map(dest => dest.Favorites, src => src.Favorites.Count())
+                           .Map(dest => dest.Payments, src => src.Payments.Sum(x => x.Amount));
+
+            TypeAdapterConfig<Comment, CommentDto>.NewConfig()
+                        .Map(dest => dest.CustomerName, src => src.Customer.FirstName + " " + src.Customer.LastName);
+                    
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

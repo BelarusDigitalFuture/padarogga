@@ -8,10 +8,8 @@
 @using GoogleMapsComponents
 @using GoogleMapsComponents.Maps
 @inject HttpClient Http
-<h1>Create new route</h1>
 
-
-
+<h3>Routes</h3>
 
 <DxFormLayout CaptionPosition="CaptionPosition.Vertical">
     <DxFormLayoutGroup Caption="Информация о маршруте" ColSpanMd="12">
@@ -21,6 +19,14 @@
                            BindValueMode="BindValueMode.OnInput"
                            NullText="Type name...">
                 </DxTextBox>
+            </Template>
+        </DxFormLayoutItem>
+
+        <DxFormLayoutItem Caption="Описание:" ColSpanMd="12" BeginRow="true">
+            <Template>
+                <DxMemo @bind-Text="@Model.Description"
+                        Rows="20">
+                </DxMemo>
             </Template>
         </DxFormLayoutItem>
 
@@ -62,26 +68,22 @@
             </Template>
         </DxFormLayoutItem>
 
-        <DxFormLayoutItem Caption="Описание:" BeginRow="true">
+
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="Марушрут" ColSpanMd="12">
+        <DxFormLayoutItem BeginRow="true" ColSpanMd="12">
             <Template>
-                <DxMemo @bind-Text="@Model.Description">
-                </DxMemo>
+                <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
             </Template>
         </DxFormLayoutItem>
     </DxFormLayoutGroup>
-
-    <DxFormLayoutItem BeginRow="true" ColSpanMd="12">
-        <Template>
-            <DxButton RenderStyle="ButtonRenderStyle.Primary" Text="Add waypoint" Title="Add waypoint" Click="@AddWaypoint" IconCssClass="add" style="margin-right: 0.5em;" />
-            <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
-        </Template>
-    </DxFormLayoutItem>
 
 
     @foreach (var waypoint in Model.Waypoints)
     {
         <DxFormLayoutGroup Caption="@waypoint.Name" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Название:" ColSpanMd="4" BeginRow="false">
+            <DxFormLayoutItem Caption="Название:" ColSpanMd="8" BeginRow="true">
                 <Template>
                     <DxTextBox @bind-Text="@waypoint.Name"
                                BindValueMode="BindValueMode.OnInput"
@@ -90,7 +92,16 @@
                 </Template>
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Фото:" ColSpanMd="4" BeginRow="false">
+
+            <DxFormLayoutItem Caption="Описание:" ColSpanMd="12" BeginRow="true">
+                <Template>
+                    <DxMemo @bind-Text="@waypoint.Description"
+                            Rows="10">
+                    </DxMemo>
+                </Template>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Фото:" ColSpanMd="12" BeginRow="true">
                 <Template>
                     <DxTextBox @bind-Text="@waypoint.ImageUrl"
                                BindValueMode="BindValueMode.OnInput"
@@ -99,7 +110,7 @@
                 </Template>
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Media:" ColSpanMd="4" BeginRow="false">
+            <DxFormLayoutItem Caption="Media:" ColSpanMd="12" BeginRow="true">
                 <Template>
                     <DxTextBox @bind-Text="@waypoint.MediaUrl"
                                BindValueMode="BindValueMode.OnInput"
@@ -108,17 +119,12 @@
                 </Template>
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Описание:" ColSpanMd="4" BeginRow="true">
-                <Template>
-                    <DxMemo @bind-Text="@waypoint.Description">
-                    </DxMemo>
-                </Template>
-            </DxFormLayoutItem>
         </DxFormLayoutGroup>
     }
 
-    <DxFormLayoutItem BeginRow="true" ColSpanMd="12">
+    <DxFormLayoutItem BeginRow="true" ColSpanMd="4">
         <Template>
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Text="Add waypoint" Title="Add waypoint" Click="@AddWaypoint" IconCssClass="add" style="margin-right: 0.5em;" />
             <DxButton RenderStyle="ButtonRenderStyle.Primary" Text="Create" Title="Save route" Click="@CreateRoute" style="margin-right: 0.5em;" />
 
         </Template>

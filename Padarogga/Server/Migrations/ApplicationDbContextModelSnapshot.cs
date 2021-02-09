@@ -307,6 +307,9 @@ namespace Padarogga.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("numeric");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
@@ -483,6 +486,39 @@ namespace Padarogga.Server.Migrations
                     b.ToTable("Routes");
                 });
 
+            modelBuilder.Entity("Padarogga.Server.Models.RoutePayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("RoutePayments");
+                });
+
             modelBuilder.Entity("Padarogga.Server.Models.Waypoint", b =>
                 {
                     b.Property<Guid>("Id")
@@ -641,6 +677,21 @@ namespace Padarogga.Server.Migrations
                     b.HasOne("Padarogga.Server.Models.Category", "Category")
                         .WithMany("Routes")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Padarogga.Server.Models.RoutePayment", b =>
+                {
+                    b.HasOne("Padarogga.Server.Models.Customer", "Customer")
+                        .WithMany("Payments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Padarogga.Server.Models.Route", "Route")
+                        .WithMany("Payments")
+                        .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

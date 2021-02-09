@@ -22,5 +22,7 @@ namespace Padarogga.Server.Models
         public ICollection<Favorites> Favorites { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<RoutePayment> Payments { get; set; }
     }
 }

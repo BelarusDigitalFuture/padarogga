@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Padarogga.Server.Data
 {
@@ -35,6 +36,8 @@ namespace Padarogga.Server.Data
         public DbSet<Favorites> Favorites { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<RoutePayment> RoutePayments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,7 +80,32 @@ namespace Padarogga.Server.Data
                   .WithMany(s => s.Favorites)
                   .HasForeignKey(r => r.RouteId);
 
+            //postgis
             modelBuilder.HasPostgresExtension("postgis");
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.DetectChanges();           
+
+            //created, updated dates
+            var entries = ChangeTracker
+                   .Entries()
+                   .Where(e => e.Entity is BaseEntity && (
+                           e.State == EntityState.Added
+                           || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.UtcNow;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+                }
+            }
+
+            return await base.SaveChangesAsync();
         }
 
 

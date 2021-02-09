@@ -32,6 +32,8 @@ namespace Padarogga.Server.Controllers
             this.authorService = authorService ?? throw new ArgumentNullException(nameof(authorService));
         }
 
+        string userId = "df9d86e4-3dad-40e1-8986-00bda7847b4f";
+
         [HttpPost]
         public async Task<ActionResult> Add(AddRouteModel model)
         {
@@ -40,9 +42,18 @@ namespace Padarogga.Server.Controllers
 
             //TODO get user Id
             //var userName = httpContextAccessor.HttpContext.User.Identity.Name;
-            var author = await authorService.GetByUserId("df9d86e4-3dad-40e1-8986-00bda7847b4f");
-            var route = routeService.AddAsync(author.Id, model);
+            var author = await authorService.GetByUserId(userId);
+            var route = await routeService.AddAsync(author.Id, model);
             return Ok(route.Id);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var author = await authorService.GetByUserId(userId);
+            var routes = await routeService.GetByAuthorAsync(author.Id);
+            return Ok(routes);
         }
     }
 }

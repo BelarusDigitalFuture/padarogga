@@ -1,0 +1,40 @@
+﻿@page "/routes/{routeId}/comments"
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Padarogga.Shared
+@inject HttpClient Http
+
+<h3>Comments</h3>
+
+
+@if (comments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    foreach (var comment in comments)
+    {
+        //TODO add comments
+    }
+}
+
+
+@code {
+
+    [Parameter]
+    public Guid RouteId { get; set; }
+
+    private List<CommentDto> comments;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            comments = await Http.GetFromJsonAsync<List<CommentDto>>($"routes/{RouteId}/comments") ;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

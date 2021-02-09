@@ -33,5 +33,7 @@ namespace Padarogga.Server.Models
         public ICollection<CustomerRating> Ratings { get; set; }
 
         public ICollection<Favorites> Favorites { get; set; }
+
+        public ICollection<RoutePayment> Payments { get; set; }
     }
 }
