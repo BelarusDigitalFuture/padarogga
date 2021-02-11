@@ -7,12 +7,14 @@ using Xamarin.Forms;
 
 using Padarogga.Mobile.Models;
 using Padarogga.Mobile.Services;
+using Padarogga.Shared;
 
 namespace Padarogga.Mobile.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<RouteDto> RouteStore => DependencyService.Get<IDataStore<RouteDto>>();
 
         bool isBusy = false;
         public bool IsBusy

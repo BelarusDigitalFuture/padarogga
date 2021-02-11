@@ -51,7 +51,7 @@ namespace Padarogga.Server
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IPaymentService, PaymentService>();
 
-            TypeAdapterConfig<Route, AuthorRoute>.NewConfig()
+            TypeAdapterConfig<Route, RouteDto>.NewConfig()
                            .Map(dest => dest.CategoryName, src => src.Category.Name)
                            .Map(dest => dest.Rating, src => src.Ratings.Average(x => x.Rating))
                            .Map(dest => dest.Waypoints, src => src.Waypoints.Count())

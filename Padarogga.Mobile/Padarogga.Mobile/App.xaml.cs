@@ -13,6 +13,7 @@ namespace Padarogga.Mobile
         {
             InitializeComponent();
 
+            DependencyService.Register<RouteDataStore>();
             DependencyService.Register<MockDataStore>();
             MainPage = new MainPage();
         }

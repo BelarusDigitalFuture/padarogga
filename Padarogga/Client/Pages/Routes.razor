@@ -14,33 +14,33 @@
 else
 {
 <DxDataGrid Data="routes">
-    <DxDataGridColumn Field="@nameof(AuthorRoute.Name)"
+    <DxDataGridColumn Field="@nameof(RouteDto.Name)"
                       Caption="Name" />
-    <DxDataGridColumn Field="@nameof(AuthorRoute.CategoryName)"
+    <DxDataGridColumn Field="@nameof(RouteDto.CategoryName)"
                       Caption="Category"
                       TextAlignment="DataGridTextAlign.Left"
                       Width="100px" />
-    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Waypoints)"
+    <DxDataGridSpinEditColumn Field="@nameof(RouteDto.Waypoints)"
                               Caption="Waypoints"
                               TextAlignment="DataGridTextAlign.Left"
                               Width="100px" />
-    <DxDataGridColumn Field="@nameof(AuthorRoute.Difficulty)"
+    <DxDataGridColumn Field="@nameof(RouteDto.Difficulty)"
                               Caption="Difficulty"
                               TextAlignment="DataGridTextAlign.Left"
                               Width="100px" />
-    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Duration)"
+    <DxDataGridSpinEditColumn Field="@nameof(RouteDto.Duration)"
                               Caption="Duration"
                               TextAlignment="DataGridTextAlign.Left"
                               Width="100px" />
-    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Rating)"
+    <DxDataGridSpinEditColumn Field="@nameof(RouteDto.Rating)"
                               Caption="Rating"
                               TextAlignment="DataGridTextAlign.Left"
                               Width="100px" />
-    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Favorites)"
+    <DxDataGridSpinEditColumn Field="@nameof(RouteDto.Favorites)"
                               Caption="Favorites"
                               TextAlignment="DataGridTextAlign.Left"
                               Width="100px" />
-    <DxDataGridSpinEditColumn Field="@nameof(AuthorRoute.Comments)"
+    <DxDataGridSpinEditColumn Field="@nameof(RouteDto.Comments)"
                               Caption="Comments" />
 </DxDataGrid>
 }
@@ -48,12 +48,12 @@ else
 
 @code {
 
-    private List<AuthorRoute> routes;
+    private List<RouteDto> routes;
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            routes = await Http.GetFromJsonAsync<List<AuthorRoute>>("Routes");
+            routes = await Http.GetFromJsonAsync<List<RouteDto>>("Routes");
         }
         catch (AccessTokenNotAvailableException exception)
         {

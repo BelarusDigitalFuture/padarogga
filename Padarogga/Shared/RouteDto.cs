@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Padarogga.Shared
 {
-    public class AuthorRoute
+    public class RouteDto
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

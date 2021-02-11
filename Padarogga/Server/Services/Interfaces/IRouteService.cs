@@ -9,6 +9,6 @@ namespace Padarogga.Server.Services
     public interface IRouteService
     {
         Task<Route> AddAsync(Guid authorId, AddRouteModel model);
-        Task<List<AuthorRoute>> GetByAuthorAsync(Guid authorId);
+        Task<List<RouteDto>> GetByAuthorAsync(Guid authorId);
     }
 }

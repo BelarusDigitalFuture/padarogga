@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="Padarogga.Mobile.Views.WaypointPage"
+             xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+               
+                <Label Text="{Binding Item.Name}" d:Text="Item name" FontSize="Medium"/>
+
+                <maps:Map x:Name="map" IsShowingUser="true" HeightRequest="200"/>
+               
+                <Label Text="{Binding Item.Description}" d:Text="Item description" FontSize="Small"/>
+
+                <Image  Source="https://www.hata.by/images/uploaded/articles/articles-21545-7ca1662c46411422b0a9.jpg" />
+
+                <WebView Source="https://www.youtube.com/embed/rAGh8iy9YnU"
+                         HeightRequest="256"               
+                />  
+                <!--<controls:CarouselViewControl Orientation="Horizontal" InterPageSpacing="10" ItemsSource="{Binding Item.ImageUrls}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <controls:CarouselViewControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image  Source="{Binding }" />
+                        </DataTemplate>
+                    </controls:CarouselViewControl.ItemTemplate>
+                </controls:CarouselViewControl>-->
+                
+
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

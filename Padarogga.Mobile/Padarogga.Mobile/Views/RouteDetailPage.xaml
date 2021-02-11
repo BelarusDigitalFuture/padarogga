@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Padarogga.Mobile.Views.RouteDetailPage"
+              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             Title="{Binding Title}">
+    <ScrollView>
+        <StackLayout Spacing="10" Padding="10">
+            <Label Text="Name:" FontSize="Medium" />
+            <Label Text="{Binding Item.Name}" d:Text="Item name" FontSize="Small"/>
+
+            <maps:Map x:Name="map" IsShowingUser="true" HeightRequest="200"/>
+
+            <Label Text="Description:" FontSize="Medium" />
+            <Label Text="{Binding Item.Description}" d:Text="Item description" FontSize="Small"/>
+
+            <Label Text="Rating:" FontSize="Medium" />
+            <Label Text="{Binding Item.Rating}" d:Text="Rating" FontSize="Small"/>
+
+            <Label Text="Comments:" FontSize="Medium" />
+            <Label Text="{Binding Item.Comments}" d:Text="Rating" FontSize="Small"/>
+
+            <Label Text="Favorites:" FontSize="Medium" />
+            <Label Text="{Binding Item.Favorites}" d:Text="Rating" FontSize="Small"/>
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

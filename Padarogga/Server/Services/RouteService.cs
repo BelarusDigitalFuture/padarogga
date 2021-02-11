@@ -60,12 +60,12 @@ namespace Padarogga.Server.Services
             return route;
         }
 
-        public async Task<List<AuthorRoute>> GetByAuthorAsync(Guid authorId)
+        public async Task<List<RouteDto>> GetByAuthorAsync(Guid authorId)
         {
             return await context.Routes
                 .Where(x => x.AuthorId == authorId)
                 .OrderByDescending(x => x.CreatedAt)
-                .ProjectToType<AuthorRoute>()
+                .ProjectToType<RouteDto>()
                 .ToListAsync();
         }
 

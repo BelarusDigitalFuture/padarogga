@@ -11,7 +11,6 @@ using Padarogga.Shared;
 
 namespace Padarogga.Server.Controllers
 {
-    [Authorize]
     [Route("routes")]
     [ApiController]
     public class RoutesController : ControllerBase
