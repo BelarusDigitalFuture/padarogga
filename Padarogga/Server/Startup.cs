@@ -46,20 +46,20 @@ namespace Padarogga.Server
             services.AddHttpContextAccessor();
 
             services.AddScoped<IRouteService, RouteService>();
-            services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IRouteTypeService, RouteTypeService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IPaymentService, PaymentService>();
 
             TypeAdapterConfig<Route, RouteDto>.NewConfig()
-                           .Map(dest => dest.CategoryName, src => src.Category.Name)
+                           .Map(dest => dest.CategoryName, src => src.Type.Name)
                            .Map(dest => dest.Rating, src => src.Ratings.Average(x => x.Rating))
                            .Map(dest => dest.Waypoints, src => src.Waypoints.Count())
                            .Map(dest => dest.Comments, src => src.Comments.Count())
                            .Map(dest => dest.Favorites, src => src.Favorites.Count())
                            .Map(dest => dest.Payments, src => src.Payments.Sum(x => x.Amount));
 
-            TypeAdapterConfig<Comment, CommentDto>.NewConfig()
+            TypeAdapterConfig<Comment, RouteCommentDto>.NewConfig()
                         .Map(dest => dest.CustomerName, src => src.Customer.FirstName + " " + src.Customer.LastName);
                     
 

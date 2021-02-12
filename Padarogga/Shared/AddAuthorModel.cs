@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Padarogga.Shared
 {
-    public class AddAuthorModel
+    public class AddCustomerModel
     {
         public string UserId { get; set; }
 

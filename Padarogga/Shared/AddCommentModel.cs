@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Padarogga.Shared
 {
-    public class AddCommentModel
+    public class AddRouteCommentModel
     {
         public string Text { get; set; }
 

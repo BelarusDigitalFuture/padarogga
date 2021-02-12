@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Services
 {
-    public interface ICategoryService
+    public interface IRouteTypeService
     {
-        Task<List<CategoryDto>> GetAsync();
+        Task<List<RouteTypeDto>> GetAsync();
     }
 }

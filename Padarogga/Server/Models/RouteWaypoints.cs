@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Models
 {
-    public class Favorites : BaseEntity
+    public class RouteWaypoints
     {
-        public Guid CustomerId { get; set; }
+        public Guid WaypointId { get; set; }
 
-        public Customer Customer { get; set; }
+        public Waypoint Waypoint { get; set; }
 
         public Guid RouteId { get; set; }
 
         public Route Route { get; set; }
+
+        public int Order { get; set; }
     }
 }

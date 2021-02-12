@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Padarogga.Shared
 {
-    public class CommentDto : BaseDto
+    public class RouteCommentDto : BaseDto
     {
         public Guid Id { get; set; }
 

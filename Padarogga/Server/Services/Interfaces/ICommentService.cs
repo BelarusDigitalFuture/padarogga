@@ -8,8 +8,8 @@ namespace Padarogga.Server.Services
 {
     public interface ICommentService
     {
-        Task<Comment> AddAsync(AddCommentModel model);
-        Task<List<CommentDto>> GetByAuthor(Guid authorId);
-        Task<List<CommentDto>> GetByRoute(Guid routeId);
+        Task<Comment> AddRouteCommentAsync(AddRouteCommentModel model);
+        Task<List<RouteCommentDto>> GetRouteCommentsByCustomer(Guid authorId);
+        Task<List<RouteCommentDto>> GetByRoute(Guid routeId);
     }
 }

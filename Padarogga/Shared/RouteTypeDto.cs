@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Padarogga.Shared
 {
-    public class CategoryDto
+    public class RouteTypeDto
     {
         public int Id { get; set; }
 

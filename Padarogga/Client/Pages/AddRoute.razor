@@ -30,14 +30,14 @@
             </Template>
         </DxFormLayoutItem>
 
-        <DxFormLayoutItem Caption="Категория:" ColSpanMd="6" BeginRow="true">
+        <DxFormLayoutItem Caption="Тип:" ColSpanMd="6" BeginRow="true">
             <Template>
-                <DxComboBox Data="@categories"
+                <DxComboBox Data="@routeTypes"
                             AllowUserInput="true"
                             NullText="Select category ..."
-                            TextFieldName="@nameof(CategoryDto.Name)"
-                            ValueFieldName="@nameof(CategoryDto.Id)"
-                            @bind-Value="@Model.CategoryId">
+                            TextFieldName="@nameof(RouteTypeDto.Name)"
+                            ValueFieldName="@nameof(RouteTypeDto.Id)"
+                            @bind-Value="@Model.TypeId">
                 </DxComboBox>
             </Template>
         </DxFormLayoutItem>
@@ -145,7 +145,7 @@
 
     private Polyline polyline;
 
-    private CategoryDto[] categories;
+    private RouteTypeDto[] routeTypes;
 
     private List<EnumWrapper<Difficulty>> difficulties;
 
@@ -169,7 +169,7 @@
 
         try
         {
-            categories = await Http.GetFromJsonAsync<CategoryDto[]>("Categories");
+            routeTypes = await Http.GetFromJsonAsync<RouteTypeDto[]>("routeTypes");
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -198,6 +198,8 @@
         try
         {
             var route = await Http.PostAsJsonAsync<AddRouteModel>("Routes", Model);
+
+            //TODO redirect to page
         }
         catch (AccessTokenNotAvailableException exception)
         {

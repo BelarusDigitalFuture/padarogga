@@ -10,27 +10,27 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Services
 {
-    public class AuthorService : IAuthorService
+    public class CustomerService : ICustomerService
     {
         private readonly PadaroggaContext context;
 
-        public AuthorService(PadaroggaContext context)
+        public CustomerService(PadaroggaContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Author> AddAsync(AddAuthorModel model)
+        public async Task<Customer> AddAsync(AddCustomerModel model)
         {
-            var author = model.Adapt<Author>();
-            context.Authors.Add(author);
+            var customer = model.Adapt<Customer>();
+            context.Customers.Add(customer);
             await context.SaveChangesAsync();
-            return author;
+            return customer;
         }
 
-        public async Task<Author> GetByUserId(string userId)
+        public async Task<Customer> GetByUserId(string userId)
         {
-            var author = await context.Authors.FirstOrDefaultAsync(x => x.UserId == userId);            
-            return author;
+            var customer = await context.Customers.FirstOrDefaultAsync(x => x.UserId == userId);            
+            return customer;
         }
     }
 }

@@ -14,25 +14,27 @@ namespace Padarogga.Server.Models
 
         public string Description { get; set; }
 
-        public int CategoryId { get; set; }
+        public int TypeId { get; set; }
 
-        public Category Category { get; set; }
+        public RouteType Type { get; set; }
 
-        public Author Author { get; set; }
+        public Customer Customer { get; set; }
 
-        public Guid AuthorId { get; set; }
+        public Guid CusomerId { get; set; }
 
-        public int Duration { get; set; }
+        public TimeSpan Duration { get; set; }
+
+        public List<string> Images { get; set; }
 
         public Difficulty Difficulty { get; set; }
 
-        public ICollection<Waypoint> Waypoints { get; set; }
+        public ICollection<RouteWaypoints> Waypoints { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<RouteComment> Comments { get; set; }
 
-        public ICollection<CustomerRating> Ratings { get; set; }
+        public ICollection<RouteRating> Ratings { get; set; }
 
-        public ICollection<Favorites> Favorites { get; set; }
+        public ICollection<FavoriteRoute> Favorites { get; set; }
 
         public ICollection<RoutePayment> Payments { get; set; }
     }

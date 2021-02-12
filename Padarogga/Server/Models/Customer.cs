@@ -13,15 +13,21 @@ namespace Padarogga.Server.Models
 
         public string UserId { get; set; }
 
-        public ICollection<CustomerRating> Ratings { get; set; }
+        public ICollection<RouteRating> Ratings { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
-        public ICollection<Favorites> Favorites { get; set; }
+        public ICollection<Route> Routes { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<FavoriteRoute> FavoriteRoutes { get; set; }
+
+        public ICollection<FavoriteWaypoint> FavoriteWaypoints { get; set; }
+
+        public ICollection<RouteComment> RouteComments { get; set; }
+
+        public ICollection<WaypointComment> WaypointComments { get; set; }
 
         public ICollection<RoutePayment> Payments { get; set; }
     }

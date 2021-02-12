@@ -13,10 +13,6 @@ namespace Padarogga.Server.Models
 
         public Guid CustomerId { get; set; }
 
-        public Customer Customer { get; set; }
-
-        public Guid RouteId { get; set; }
-
-        public Route Route { get; set; }
+        public Customer Customer { get; set; }       
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Models
 {
-    public class CustomerRating
+    public class RouteRating
     {
         public Guid CustomerId { get; set; }
 

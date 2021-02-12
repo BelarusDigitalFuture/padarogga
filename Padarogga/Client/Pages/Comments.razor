@@ -25,12 +25,13 @@ else
     [Parameter]
     public Guid RouteId { get; set; }
 
-    private List<CommentDto> comments;
+    private List<RouteCommentDto> comments;
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            comments = await Http.GetFromJsonAsync<List<CommentDto>>($"routes/{RouteId}/comments") ;
+            comments = await Http.GetFromJsonAsync<List<RouteCommentDto>>($"routes/{RouteId}/comments") ;
         }
         catch (AccessTokenNotAvailableException exception)
         {

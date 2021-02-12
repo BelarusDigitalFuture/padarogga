@@ -8,17 +8,17 @@ using Padarogga.Server.Services;
 
 namespace Padarogga.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService paymentService;
-        private readonly IAuthorService authorService;
+        private readonly ICustomerService customerService;
 
-        public PaymentsController(IPaymentService paymentService, IAuthorService authorService)
+        public PaymentsController(IPaymentService paymentService, ICustomerService authorService)
         {
             this.paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
-            this.authorService = authorService ?? throw new ArgumentNullException(nameof(authorService));
+            this.customerService = authorService ?? throw new ArgumentNullException(nameof(authorService));
         }
 
         string userId = "df9d86e4-3dad-40e1-8986-00bda7847b4f";
@@ -27,7 +27,8 @@ namespace Padarogga.Server.Controllers
         public async Task<ActionResult> Get()
         {
             //TODO add paging
-            var author = await authorService.GetByUserId(userId);
+            //TODO get userId by context
+            var author = await customerService.GetByUserId(userId);
             var payments = await paymentService.GetByAuthorAsync(author.Id);
             return Ok(payments);
         }
@@ -37,7 +38,8 @@ namespace Padarogga.Server.Controllers
         public async Task<ActionResult> Add()
         {
             //TODO add paging
-            var author = await authorService.GetByUserId(userId);
+            //TODO get userId by context
+            var author = await customerService.GetByUserId(userId);
             var payments = await paymentService.GetByAuthorAsync(author.Id);
             return Ok(payments);
         }

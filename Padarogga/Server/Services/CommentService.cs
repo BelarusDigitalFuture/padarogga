@@ -19,7 +19,7 @@ namespace Padarogga.Server.Services
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Comment> AddAsync(AddCommentModel model)
+        public async Task<Comment> AddRouteCommentAsync(AddRouteCommentModel model)
         {
             var comment = model.Adapt<Comment>();
             context.Comments.Add(comment);
@@ -28,21 +28,21 @@ namespace Padarogga.Server.Services
         }
 
 
-        public async Task<List<CommentDto>> GetByAuthor(Guid authorId)
+        public async Task<List<RouteCommentDto>> GetRouteCommentsByCustomer(Guid cusomerId)
         {
-            var comments = await context.Comments
-                                .Where(x => x.Route.AuthorId == authorId)
-                                .ProjectToType<CommentDto>()
+            var comments = await context.RouteComments
+                                .Where(x => x.Route.CusomerId == cusomerId)
+                                .ProjectToType<RouteCommentDto>()
                                 .ToListAsync();
 
             return comments;
         }
 
-        public async Task<List<CommentDto>> GetByRoute(Guid routeId)
+        public async Task<List<RouteCommentDto>> GetByRoute(Guid routeId)
         {
-            var comments = await context.Comments
+            var comments = await context.RouteComments
                                 .Where(x => x.RouteId == routeId)
-                                .ProjectToType<CommentDto>()
+                                .ProjectToType<RouteCommentDto>()
                                 .ToListAsync();
 
             return comments;

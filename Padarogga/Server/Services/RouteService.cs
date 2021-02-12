@@ -22,16 +22,17 @@ namespace Padarogga.Server.Services
 
         public async Task<Route> AddAsync(Guid authorId, AddRouteModel model)
         {
-            var duration = model.Duration;
+            TimeSpan duration = new TimeSpan();
             switch (model.DurationPeriod)
             {
                 case DurationPeriod.Hours:
+                    duration = TimeSpan.FromHours(model.Duration);
                     break;
                 case DurationPeriod.Days:
-                    duration *= 24;
+                    duration = TimeSpan.FromDays(model.Duration);
                     break;
                 case DurationPeriod.Month:
-                    duration *= 24 * 30;
+                    duration = TimeSpan.FromDays(model.Duration * 30);
                     break;
                 default:
                     break;
@@ -39,20 +40,24 @@ namespace Padarogga.Server.Services
 
             var route = new Route()
             {
-                AuthorId = authorId,
+                CusomerId = authorId,
                 Name = model.Name,
-                CategoryId = 1,//TODO get categoryId
+                TypeId = 1,//TODO get categoryId
                 Difficulty = model.Difficulty,
                 Duration = duration,
                 Description = model.Description,
-                Waypoints = new List<Waypoint>()
+                Waypoints = new List<RouteWaypoints>()
             };
 
             foreach (var addWaypointModel in model.Waypoints)
             {
                 var waypoint = addWaypointModel.Adapt<Waypoint>();
                 waypoint.Location = new NetTopologySuite.Geometries.Point(addWaypointModel.Latitude, addWaypointModel.Longitude);
-                route.Waypoints.Add(waypoint);
+
+                route.Waypoints.Add(new RouteWaypoints()
+                {
+                    Waypoint = waypoint                  
+                });
             }
 
             context.Routes.Add(route);
@@ -63,7 +68,7 @@ namespace Padarogga.Server.Services
         public async Task<List<RouteDto>> GetByAuthorAsync(Guid authorId)
         {
             return await context.Routes
-                .Where(x => x.AuthorId == authorId)
+                .Where(x => x.CusomerId == authorId)
                 .OrderByDescending(x => x.CreatedAt)
                 .ProjectToType<RouteDto>()
                 .ToListAsync();

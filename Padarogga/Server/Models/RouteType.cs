@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Padarogga.Server.Models
 {
-    public class Category
+    public class RouteType
     {
         public int Id { get; set; }
 

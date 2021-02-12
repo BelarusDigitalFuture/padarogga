@@ -30,7 +30,7 @@ namespace Padarogga.Server.Services
         public async Task<List<RoutePaymentDto>> GetByAuthorAsync(Guid authorId)
         {
             return await context.RoutePayments
-            .Where(x => x.Route.AuthorId == authorId)
+            .Where(x => x.Route.CusomerId == authorId)
             .OrderByDescending(x => x.CreatedAt)
             .ProjectToType<RoutePaymentDto>()
             .ToListAsync();

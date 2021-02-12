@@ -18,12 +18,12 @@ namespace Padarogga.Server.Controllers
         private readonly ILogger<RoutesController> logger;
         private readonly IRouteService routeService;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IAuthorService authorService;
+        private readonly ICustomerService authorService;
 
         public RoutesController(ILogger<RoutesController> logger,
             IRouteService routeService,
             IHttpContextAccessor httpContextAccessor,
-            IAuthorService authorService)
+            ICustomerService authorService)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.routeService = routeService ?? throw new ArgumentNullException(nameof(routeService));
@@ -50,6 +50,7 @@ namespace Padarogga.Server.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            //TODO get userId by context
             var author = await authorService.GetByUserId(userId);
             var routes = await routeService.GetByAuthorAsync(author.Id);
             return Ok(routes);

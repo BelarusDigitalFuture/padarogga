@@ -21,7 +21,7 @@ namespace Padarogga.Shared
 
         public DurationPeriod DurationPeriod { get; set; }
 
-        public int CategoryId { get; set; }       
+        public int TypeId { get; set; }       
 
         public Difficulty Difficulty { get; set; }
 
